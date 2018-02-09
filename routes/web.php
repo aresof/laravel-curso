@@ -18,3 +18,20 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::middleware(['auth'])->group(function() {
+    Route::middleware(['permissions'])->group(function() {
+        Route::get('/prohibido',function() {
+            return "Estás accediendo a contenido prohibido";
+        });
+    });
+    Route::resource('clients','ClientController', ['except' =>[
+        'show', 'edit', 'update', 'delete'
+    ]]);
+    Route::get('clients/{client}','ClientController@show')->name('clients.show');
+    Route::patch('clients/{client}','ClientController@update')->name('clients.update');
+    Route::get('clients/{client}/edit','ClientController@edit')->name('clients.edit');
+
+});
+
+Route::get('/home', 'HomeController@index')->name('home');

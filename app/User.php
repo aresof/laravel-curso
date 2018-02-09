@@ -2,9 +2,23 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * Class User
+ * @property integer id
+ * @property Carbon created_at
+ * @property Carbon updated_at
+ * @property string name
+ * @property string email
+ * @property string password
+ * @property string type
+ * @package App
+ * @mixin \Eloquent
+ *
+ */
 class User extends Authenticatable
 {
     use Notifiable;
