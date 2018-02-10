@@ -45,7 +45,9 @@ class ClientController extends Controller
     private function save(Client &$client, Request &$request, $save = true)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'nif' => 'required',
+            'address' => 'required'
         ]);
         $client->name = $request->name;
         $client->nif = $request->nif;
@@ -68,7 +70,7 @@ class ClientController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param Client $client
      * @return \Illuminate\Http\Response
      */
     public function edit(Client $client)
@@ -92,11 +94,30 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Client $client
      */
-    public function destroy($id)
+    public function destroy(Client $client)
     {
-        //
+        $client->delete();
+        return redirect()->route('clients.index')->with('status','Cliente eliminado!');
+
     }
+
+    /**
+     * @return mixed
+     */
+    public function search()
+    {
+        $client = Client::all();
+
+
+        $search = \Request::get('search');  the param of URI
+
+        $clients = Client::where('name','=','%'.$search.'%')
+        ->orderBy('name')
+        ->paginate(20);
+
+        return view('home',compact('users'))->withuser($user);
+    }
+
 }

@@ -13,7 +13,13 @@
                     <p class="card-text">{{ $client->nif }}</p>
                     <p class="card-text">{{ $client->address }}</p>
                     <a href="{{route('clients.edit',[$client->id])}}" class="btn btn-primary">Editar</a>
-                    <a href="#" class="btn btn-danger" onclick="hola()">Eliminar</a>
+                    <p>
+                    <form method="POST" action="{{route('clients.destroy', [$client])}}">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <button class="btn btn-danger">Eliminar?</button>
+                    </form>
+                    </p>
                 </div>
             </div>
         </div>

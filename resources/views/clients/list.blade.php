@@ -3,7 +3,9 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-
+            @if(session('status'))
+                <div class="alert alert-success" role="alert">{{session('status')}}</div>
+            @endif
             <div class="card">
                 <div class="card-block">
                     <h4 class="card-title">Lista de clientes</h4>
@@ -12,7 +14,7 @@
                     <p class="card-text">
 
                     @component('clients._table', ["clients" =>$clients ])
-                        asdasd
+
                     @endcomponent
 
                     <div class="text-center">{{$clients->links()}}</div>
