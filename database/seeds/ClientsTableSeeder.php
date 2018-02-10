@@ -13,7 +13,8 @@ class ClientsTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker\Factory::create('es_ES');
-        for($i=0; $i<2000; $i++){
+
+        for($i=0; $i<10000; $i++){
             $client = new Client();
             $client->is_company = $faker->boolean;
             $client->name =  $faker->name;
