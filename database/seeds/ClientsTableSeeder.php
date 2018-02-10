@@ -13,7 +13,7 @@ class ClientsTableSeeder extends Seeder
     public function run()
     {
         $faker = Faker\Factory::create('es_ES');
-        for($i=0; $i<100; $i++){
+        for($i=0; $i<200; $i++){
             $client = new Client();
             $client->is_company = $faker->boolean;
             $client->name =  $faker->name;
@@ -25,6 +25,7 @@ class ClientsTableSeeder extends Seeder
             $client->phone1 = $faker->phoneNumber;
             $client->phone2 = $faker->phoneNumber;
             $client->nif = $faker->vat;
+            $client->nif2 = $faker->vat;
             $client->save();
         }
     }
