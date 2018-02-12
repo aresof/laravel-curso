@@ -24,13 +24,20 @@ Route::middleware(['auth'])->group(function() {
             return "Estás accediendo a contenido prohibido";
         });
     });
+
+    Route::get('/clients/search','ClientController@search')->name('clients.search');
     Route::resource('clients','ClientController', ['except' =>[
         'show', 'edit', 'update'
     ]]);
     Route::get('clients/{client}','ClientController@show')->name('clients.show');
     Route::patch('clients/{client}','ClientController@update')->name('clients.update');
     Route::get('clients/{client}/edit','ClientController@edit')->name('clients.edit');
-    Route::get('/clients/search','ClientController@search')->name('clients.search');
+
+    Route::resource('notes','NoteController');
+    Route::resource('invoices','InvoiceController');
+    Route::resource('products','ProductController');
+
+    Route::get('clients/{client}/email','ClientController@sendEmail')->name('clients.send-email');
 
 
 });

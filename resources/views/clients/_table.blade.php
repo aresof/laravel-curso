@@ -7,10 +7,10 @@
         <th>-</th>
     </tr>
     <tr>
-        <form action="{{}}" method="get">
-        <th><input type="text" class="form-control" placeholder="Buscar por Nombre"></th>
-        <th><input type="text" class="form-control" placeholder="Buscar por NIF"></th>
-        <th><input type="text" class="form-control" placeholder="Buscar por Teléfono"></th>
+        <form action="{{ route('clients.search') }}" method="get">
+        <th><input type="text" class="form-control" placeholder="Buscar por Nombre" name="name"></th>
+        <th><input type="text" class="form-control" placeholder="Buscar por NIF" name="nif"></th>
+        <th><input type="text" class="form-control" placeholder="Buscar por Teléfono" name="phone"></th>
         <th><input type="submit" value="Buscar"></th>
         </form>
     </tr>

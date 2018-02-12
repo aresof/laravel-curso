@@ -38,4 +38,14 @@ class Client extends Model
             str_replace('-', '',
                 str_replace(' ','',$value))));
     }
+
+    public function products()
+    {
+        return $this->belongsToMany('App\Product');
+    }
+
+    public function notes()
+    {
+        return $this->hasMany('App\Note');
+    }
 }

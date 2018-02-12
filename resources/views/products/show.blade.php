@@ -13,7 +13,6 @@
                     <p class="card-text">{{ $client->nif }}</p>
                     <p class="card-text">{{ $client->address }}</p>
                     <a href="{{route('clients.edit',[$client->id])}}" class="btn btn-primary">Editar</a>
-                    <a href="{{route('clients.send-email',[$client->id])}}" class="btn btn-primary">Enviar por email</a>
                     <p>
                     <form method="POST" action="{{route('clients.destroy', [$client])}}">
                         <input type="hidden" name="_method" value="DELETE">

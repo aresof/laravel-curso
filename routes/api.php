@@ -12,3 +12,8 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('products/all','ProductController@indexAll')->name('products.indexAll');
+
+Route::resource('products','ProductController', ['except' =>[
+    'create', 'edit'
+]]);

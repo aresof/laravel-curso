@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Mail\ClientReport;
+use Illuminate\Support\Facades\Mail;
 
 class ClientController extends Controller
 {
@@ -14,8 +17,8 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::orderBy('id','desc')->paginate();
-        return view('clients.list',['clients' => $clients]);
+        $clients = Client::orderBy('id', 'desc')->paginate();
+        return view('clients.list', ['clients' => $clients]);
     }
 
     /**
@@ -26,20 +29,20 @@ class ClientController extends Controller
     public function create()
     {
         $client = new Client();
-        return view('clients.edit', ["client"=>$client]);
+        return view('clients.edit', ["client" => $client]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $client = new Client();
         $this->save($client, $request);
-        return redirect()->route('clients.show',[$client->id])->with('status','Cliente guardado!');
+        return redirect()->route('clients.show', [$client->id])->with('status', 'Cliente guardado!');
     }
 
     private function save(Client &$client, Request &$request, $save = true)
@@ -52,7 +55,7 @@ class ClientController extends Controller
         $client->name = $request->name;
         $client->nif = $request->nif;
         $client->address = $request->address;
-        $client->is_company = ($request->is_company == "1")? 1 : 0;
+        $client->is_company = ($request->is_company == "1") ? 1 : 0;
         if ($save) $client->save();
     }
 
@@ -64,7 +67,14 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        return view('clients.show',['client' => $client]);
+        return view('clients.show', ['client' => $client]);
+    }
+
+    public function sendEmail(Client $client)
+    {
+        Mail::to('arturo@gestanet.net')->send(new ClientReport($client));
+
+        return redirect()->route('clients.show', [$client->id])->with('status', 'Cliente enviado por email!');
     }
 
     /**
@@ -75,7 +85,7 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
-        return view('clients.edit',['client' => $client]);
+        return view('clients.edit', ['client' => $client]);
     }
 
     /**
@@ -88,36 +98,43 @@ class ClientController extends Controller
     public function update(Request $request, Client $client)
     {
         $this->save($client, $request);
-        return redirect('/clients/'.$client->id);
+        return redirect('/clients/' . $client->id);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Client $client
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
     public function destroy(Client $client)
     {
         $client->delete();
-        return redirect()->route('clients.index')->with('status','Cliente eliminado!');
+        return redirect()->route('clients.index')->with('status', 'Cliente eliminado!');
 
     }
 
     /**
+     * @param Request $request
      * @return mixed
      */
-    public function search()
+    public function search(Request $request)
     {
-        $client = Client::all();
+        $query = Client::query();
+        if($request->filled('name')) {
+            $query->where('name', 'like', '%'.$request->name.'%');
+        }
+        if($request->filled('nif')) {
+            $query->where('nif', 'like', '%'.$request->nif.'%');
+        }
+        if($request->filled('phone')) {
+            $query->where('phone1', 'like', '%'.$request->phone.'%');
+        }
 
+        $clients = $query->orderBy('name')->paginate(20);
 
-        $search = \Request::get('search');  the param of URI
-
-        $clients = Client::where('name','=','%'.$search.'%')
-        ->orderBy('name')
-        ->paginate(20);
-
-        return view('home',compact('users'))->withuser($user);
+        return view('clients.list', compact('clients'));
     }
 
 }
